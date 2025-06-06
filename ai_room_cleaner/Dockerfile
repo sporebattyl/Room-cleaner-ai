@@ -14,7 +14,7 @@ FROM ${BUILD_FROM}
 WORKDIR /app
 
 # Copy the backend application code
-COPY app/ /app/
+COPY app/ .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt

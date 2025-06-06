@@ -73,7 +73,7 @@ async def main_loop():
         await asyncio.sleep(update_frequency)
 
 # Mount the frontend
-app.mount("/", StaticFiles(directory="app/frontend", html=True), name="static")
+app.mount("/", StaticFiles(directory="frontend", html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn
