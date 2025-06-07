@@ -1,30 +1,20 @@
-# ==============================================================================
-# Dockerfile for AI Room Cleaner Home Assistant Add-on
-# ==============================================================================
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim-buster
 
-# --- Build Stage 1: Frontend ---
-# We will add this stage later when we develop the frontend.
-# For now, we will create a placeholder index.html.
-
-# --- Build Stage 2: Final Image ---
-ARG BUILD_FROM
-FROM ${BUILD_FROM}
-
-# Set up the working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy the backend application code
-COPY app/ .
+# Copy the current directory contents into the container at /app
+COPY app/ /app/
 
-# Install Python dependencies
+# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the run script and make it executable
-COPY run.sh /
-RUN chmod +x /run.sh
-
-# Expose the port for the web interface
+# Make port 8000 available to the world outside this container
 EXPOSE 8000
 
-# Set the entrypoint
-CMD [ "/run.sh" ]
+# Define environment variable
+ENV NAME World
+
+# Run app.py when the container launches
+CMD ["uvicorn", "app.backend.main:app", "--host", "0.0.0.0", "--port", "8000"]

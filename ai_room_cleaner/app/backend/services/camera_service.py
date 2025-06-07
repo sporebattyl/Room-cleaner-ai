@@ -1,12 +1,14 @@
-def get_placeholder_image() -> str:
-    """
-    Returns the path to a static placeholder image.
+import os
 
-    In a real implementation, this service would interact with
-    Home Assistant to get a live camera feed.
-
-    Returns:
-        The file path to the placeholder image.
+def get_image_path():
     """
-    # In the future, this could be a path to an image within the addon's assets
-    return "/data/placeholder_room_image.jpg"
+    Returns the path to the camera image.
+    For now, this returns a placeholder.
+    """
+    # In a real implementation, you would get the image from the camera entity.
+    # For now, we'll create a dummy image file for testing.
+    dummy_image_path = "/app/dummy_image.jpg"
+    if not os.path.exists(dummy_image_path):
+        with open(dummy_image_path, "w") as f:
+            f.write("This is a dummy image.")
+    return dummy_image_path

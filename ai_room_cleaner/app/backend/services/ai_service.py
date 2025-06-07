@@ -1,29 +1,27 @@
-import bashio
+import os
+import google.generativeai as genai
 
-def analyze_image_with_ai(image_path: str) -> list[str]:
+def get_ai_response(image_path):
     """
-    Analyzes an image using a mock AI service to identify messes.
-
-    In a real implementation, this function would call the Gemini API.
-    For now, it returns a static list of identified issues.
-
-    Args:
-        image_path: The path to the image file to be analyzed.
-
-    Returns:
-        A list of strings describing the identified messes.
+    Analyzes an image with the Gemini AI and returns a list of messes.
     """
-    api_key = bashio.config.get('api_key')
-    if not api_key:
-        bashio.log.warning("AI Service: API key is not configured. Using mock data.")
-        # Fallback to mock data if API key is missing
-    else:
-        bashio.log.info(f"AI Service: Analyzing image {image_path} (mock call)")
+    try:
+        api_key = os.environ.get("API_KEY")
+        if not api_key:
+            return ["Error: Gemini API key not found."]
 
-    # Mock response
-    mock_messes = [
-        "dirty laundry on the floor",
-        "unmade bed",
-        "empty pizza box on the desk"
-    ]
-    return mock_messes
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel(os.environ.get("AI_MODEL", "gemini-2.5-pro"))
+
+        with open(image_path, 'rb') as image_file:
+            image_data = image_file.read()
+
+        prompt = os.environ.get("PROMPT", "Describe the state of the room and identify any items that are out of place.")
+
+        response = model.generate_content([prompt, {"mime_type": "image/jpeg", "data": image_data}])
+
+        # This is a mock response for now.
+        # In a real implementation, you would parse the response from the AI.
+        return ["dirty laundry on the floor", "unmade bed"]
+    except Exception as e:
+        return [f"Error analyzing image: {e}"]

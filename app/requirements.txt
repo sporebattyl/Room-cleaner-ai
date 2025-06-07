@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+google-generativeai
+sqlalchemy
+aiohttp
+websockets
+python-dotenv
+bashio
